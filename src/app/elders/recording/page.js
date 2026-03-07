@@ -630,11 +630,7 @@ export default function RecordingPage() {
             {settingsMounted ? t("weSupport") : "We support:"}
           </p>
           <div className="flex flex-wrap gap-2">
-<<<<<<< HEAD
             {["English", "Mandarin", "Tamil", "Malay", "Japanese", "Korean"].map((lang) => (
-=======
-            {["English", "Mandarin", "Malay", "Tamil"].map((lang) => (
->>>>>>> ad0aaa032a4f6881c640fb3c3df65a548995e37d
               <span
                 key={lang}
                 className="rounded-full px-3 py-1.5 font-['Barlow']"
