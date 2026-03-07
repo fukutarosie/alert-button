@@ -123,21 +123,21 @@ export default function RecordingPage() {
       </header>
 
       <main className="mx-auto max-w-lg px-4 pb-8 pt-4">
-        {/* 2. Camera section */}
+        {/* 2. Camera section — video always in DOM so ref is set when we attach stream */}
         <section
           className="relative aspect-video w-full overflow-hidden rounded-lg bg-black"
           aria-label="Camera"
         >
-          {cameraOn ? (
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              muted
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-[#555555]">
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            className="h-full w-full object-cover"
+            aria-hidden={!cameraOn}
+          />
+          {!cameraOn && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black text-[#555555]">
               <VideoOff className="h-14 w-14 flex-shrink-0" strokeWidth={2} aria-hidden />
               <span className="text-lg font-['Barlow']">Camera Off</span>
             </div>
