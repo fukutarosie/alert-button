@@ -14,14 +14,14 @@ export async function analyseAudio({ audioFile }) {
 
   const transcript = translation.text;
 
-  const prompt = `
+ const prompt = `
 You are an AI emergency monitoring system analysing a transcript from a security microphone.
 Carefully analyse the text and determine the situation.
 
 Classify into ONE category:
 urgent (Immediate danger, violence, fire, medical distress, [screaming], or [crying])
 non-urgent (Arguments, suspicious behavior, loitering, or [whispering])
-uncertain (Normal conversation, everyday activity, [laughter], [singing], or [joyful shouting])
+false alarm (Normal conversation, everyday activity, [laughter], [singing], or [joyful shouting])
 
 Return STRICT JSON:
 {
