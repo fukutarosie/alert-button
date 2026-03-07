@@ -22,6 +22,7 @@ export default function RecordingPage() {
   const [recordingElapsed, setRecordingElapsed] = useState(0);
   const [barHeights, setBarHeights] = useState(Array(BAR_COUNT).fill(20));
   const [streamReady, setStreamReady] = useState(false);
+  const [recordingStarted, setRecordingStarted] = useState(false);
 
   const streamRef = useRef(null);
   const videoStreamRef = useRef(null);
@@ -32,12 +33,14 @@ export default function RecordingPage() {
   const recordingStartRef = useRef(null);
   const analyserRef = useRef(null);
   const animationRef = useRef(null);
-    const isRecording = mounted && recordingStartRef.current !== null;
+
+  const isRecording = recordingStarted && recordingStartRef.current !== null;
   const hasHitMax = recordingElapsed >= MAX_RECORDING_SECONDS;
 
   useEffect(() => {
     setMounted(true);
     recordingStartRef.current = Date.now();
+    setRecordingStarted(true);
   }, []);
 
   // Mic on mount + real-time waveform from AnalyserNode
@@ -82,14 +85,12 @@ export default function RecordingPage() {
     };
   }, [mounted]);
 
-  // Start audio recording when mic stream is ready (once)
+  // Start audio + video recording only when user has clicked "Start recording" and stream is ready
   useEffect(() => {
-    if (!streamReady || !streamRef.current || recordingStartRef.current !== null) return;
+    if (!recordingStarted || !streamRef.current || recordingStartRef.current === null) return;
+    if (audioRecorderRef.current?.state === "recording") return;
 
     audioChunksRef.current = [];
-    recordingStartRef.current = Date.now();
-    setRecordingElapsed(0);
-
     const audioRecorder = new MediaRecorder(streamRef.current, {
       mimeType: "audio/webm;codecs=opus",
     });
@@ -100,15 +101,16 @@ export default function RecordingPage() {
     return () => {
       if (audioRecorderRef.current?.state === "recording") audioRecorderRef.current.stop();
     };
-  }, [streamReady]);
+  }, [recordingStarted, streamReady]);
 
-  // Start/stop video recorder when camera is toggled
+  // Start/stop video recorder when camera is on and recording session has started
   useEffect(() => {
-    if (!cameraOn || !videoStreamRef.current || !streamRef.current) {
+    if (!recordingStarted || !cameraOn || !videoStreamRef.current || !streamRef.current) {
       if (videoRecorderRef.current?.state === "recording") videoRecorderRef.current.stop();
       videoRecorderRef.current = null;
       return;
     }
+    if (videoRecorderRef.current?.state === "recording") return;
 
     videoChunksRef.current = [];
     const combined = new MediaStream([
@@ -124,7 +126,7 @@ export default function RecordingPage() {
       if (videoRecorderRef.current?.state === "recording") videoRecorderRef.current.stop();
       videoRecorderRef.current = null;
     };
-  }, [cameraOn]);
+  }, [recordingStarted, cameraOn]);
 
   // Recording elapsed timer (0..10s) and auto-complete at 10s
   useEffect(() => {
@@ -190,17 +192,17 @@ export default function RecordingPage() {
     try {
       if (audioBlob) {
         const voiceForm = new FormData();
-        voiceForm.append("audio", audioBlob);
+        voiceForm.append("audio", audioBlob, "audio.webm");
         const voiceRes = await fetch("/api/voice", { method: "POST", body: voiceForm });
         if (voiceRes.ok) {
           const data = await voiceRes.json();
-          transcript = data.transcript || "";
+          transcript = data.transcript ?? "";
         }
       }
 
       if (videoBlob) {
         const videoForm = new FormData();
-        videoForm.append("video", videoBlob);
+        videoForm.append("video", videoBlob, "video.webm");
         const videoRes = await fetch("/api/video", { method: "POST", body: videoForm });
         if (videoRes.ok) {
           const data = await videoRes.json();

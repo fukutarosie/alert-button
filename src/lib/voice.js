@@ -4,19 +4,39 @@ function getOpenAI() {
   return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 }
 
-/**
- * Transcribe audio blob to text using OpenAI Whisper.
- * @param {Blob|File} audioBlob - Audio file (webm, mp3, wav, m4a, etc.)
- * @returns {Promise<string>} Transcript text
- */
-export async function transcribeAudio(audioBlob) {
+export async function analyseAudio({ audioFile }) {
   const openai = getOpenAI();
-  const file = new File([audioBlob], "audio.webm", { type: audioBlob.type || "audio/webm" });
 
-  const transcription = await openai.audio.transcriptions.create({
-    file,
+  const translation = await openai.audio.translations.create({
+    file: audioFile,
     model: "whisper-1",
   });
 
-  return transcription.text?.trim() || "";
+  const transcript = translation.text;
+
+  const prompt = `
+You are an AI emergency monitoring system analysing a transcript from a security microphone.
+Carefully analyse the text and determine the situation.
+
+Classify into ONE category:
+urgent (Immediate danger, violence, fire, medical distress)
+non-urgent (Arguments, suspicious behavior, loitering)
+false alarm (Normal conversation, everyday activity)
+
+Return STRICT JSON:
+{
+  "classification": "urgent | non-urgent | false alarm",
+  "confidence": "low | medium | high",
+  "reason": "short explanation",
+  "transcript": "${transcript}"
+}
+`;
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o",
+    response_format: { type: "json_object" },
+    messages: [{ role: "user", content: prompt }],
+  });
+
+  return response.choices[0].message.content;
 }
