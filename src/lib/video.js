@@ -1,10 +1,11 @@
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-});
+function getOpenAI() {
+    return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+}
 
 export async function analyseVideo({ video }) {
+    const openai = getOpenAI();
 
     const buffer = Buffer.from(await video.arrayBuffer());
     const base64Video = buffer.toString('base64');

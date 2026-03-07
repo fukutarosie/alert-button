@@ -1,12 +1,15 @@
 import OpenAI from "openai";
-const client = new OpenAI();
+
+function getOpenAI() {
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+}
 
 export async function classifyUrgency(userTextPromise = "", imageDescPromise = "") {
   const [userText, imageDesc] = await Promise.all([
-    userTextPromise, 
+    userTextPromise,
     imageDescPromise
   ]);
-  
+
   const finalUserText = userText || "";
   const finalImageDesc = imageDesc || "";
 
@@ -14,6 +17,7 @@ export async function classifyUrgency(userTextPromise = "", imageDescPromise = "
     return "Urgent";
   }
 
+  const client = getOpenAI();
   const response = await client.responses.create({
     model: "gpt-5-mini",
     input: `You are an expert triage assistant for a service supporting elderly residents living in Singapore HDB flats. Your job is to read a help request and a description of the elderly person asking for help. You must classify the situation strictly as either "Urgent" or "Not Urgent". Do not provide any other text, explanation, or conversation.
