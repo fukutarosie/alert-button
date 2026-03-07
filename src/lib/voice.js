@@ -21,7 +21,7 @@ Carefully analyse the text and determine the situation.
 Classify into ONE category:
 urgent (Immediate danger, violence, fire, medical distress, [screaming], or [crying])
 non-urgent (Arguments, suspicious behavior, loitering, or [whispering])
-false alarm (Normal conversation, everyday activity, [laughter], [singing], or [joyful shouting])
+uncertain (Normal conversation, everyday activity, [laughter], [singing], or [joyful shouting])
 
 Return STRICT JSON:
 {
