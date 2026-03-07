@@ -19,18 +19,7 @@ export async function POST(req) {
             audioFile
         });
 
-        // 2. Forward the JSON string to your /api/text endpoint (Matching Video format)
-        const response = await fetch(`/api/text`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ answer }) // answer is the JSON string from analyseAudio
-        });
-
-        const result = await response.json();
-
-        return NextResponse.json(result);
+        return NextResponse.json(answer);
         
     } catch (error) {
         console.error("Audio Analysis Route Error:", error);
