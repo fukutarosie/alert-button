@@ -75,12 +75,14 @@ export default function Home() {
 
         {/* Header */}
         <header className="mb-10 text-center">
-          <h1
-            className="font-['Barlow_Condensed'] mb-3 text-4xl font-bold tracking-tight sm:text-5xl"
-            style={{ color: colors.text }}
-          >
-            {mounted ? t("title") : "Personal Alert Button"}
-          </h1>
+          <div className="flex justify-center">
+            <h1
+              className="font-['Barlow_Condensed'] mb-3 text-4xl font-bold tracking-tight sm:text-5xl whitespace-nowrap text-center"
+              style={{ color: colors.text }}
+            >
+              {mounted ? t("Personal Alert Button (PAB)") : "Personal Alert Button"}
+            </h1>
+          </div>
           <p
             className="font-['Barlow'] text-lg"
             style={{ color: colors.textMuted }}
