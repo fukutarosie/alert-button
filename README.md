@@ -1,32 +1,42 @@
-# Personal Alert Button (PAB)
+# 🚨 Personal Alert Button (PAB)
 
-Personal Alert Button is a web application designed to help elderly users quickly request assistance in an emergency. The experience begins with a large, easy-to-press emergency button that guides the user through a short recording flow, captures audio and optional video, and sends the data to AI-powered analysis for urgency triage.
+When every second matters, your app should be simple, calm, and fast. Personal Alert Button is a friendly emergency help app built for elderly users who may need to call for support with just one tap.
 
-## What this project does
+Think of it as a digital safety buddy: big buttons, clear guidance, and smart AI help behind the scenes.
 
-- Provides a simple emergency interface with a prominent "Emergency" button.
-- Guides the user through microphone permissions and a short countdown before recording starts.
-- Records audio and, when enabled, video to capture the situation more clearly.
-- Uses AI to transcribe and classify the incident as Urgent, Not Urgent, or Uncertain.
-- Stores reports in Supabase and allows an admin to review, edit, and manage alerts from a dashboard.
+## ✨ What this project does
 
-## Core user flow
+- Gives users a bold, easy-to-press emergency button when they need help fast.
+- Guides them through a quick recording flow so helpers can understand what’s happening.
+- Captures voice and optional video to share the situation more clearly.
+- Uses AI to turn that input into a helpful report and classify the urgency.
+- Lets authorized staff review, manage, and respond to alerts from a simple dashboard.
 
-1. The user opens the app and presses the emergency button.
-2. The app requests microphone access and prepares a short recording session.
-3. Audio and optional video are captured and sent to backend APIs for analysis.
-4. The system produces a report that can be reviewed by authorized staff.
+## 🧡 Why it’s awesome
 
-## Main features
+- Designed to feel simple and reassuring, not overwhelming.
+- Built for accessibility and speed in stressful moments.
+- Combines a friendly front end with smart backend support.
+- Perfect for hackathons, community care projects, or real-world elder support solutions.
 
-- Large, accessible emergency button for quick use
-- Multi-language and dark/light theme support
-- Audio waveform visualization while recording
-- Optional camera support during capture
-- AI-based urgency classification
-- Admin report dashboard with filtering and status updates
+## 🔄 How it works
 
-## Tech stack
+1. The user opens the app and taps the big emergency button.
+2. The app gets ready to record a short message.
+3. Audio and optional video are captured for context.
+4. AI helps classify the situation as Urgent, Not Urgent, or Uncertain.
+5. The report is stored and can be reviewed by an admin.
+
+## 🚀 Main features
+
+- Big, accessible emergency button
+- Calm, modern UI with light/dark themes
+- Voice recording with live audio visualization
+- Optional camera support
+- AI-powered urgency classification
+- Admin dashboard for reviewing reports
+
+## 🛠️ Tech stack
 
 - Next.js
 - React
@@ -35,14 +45,14 @@ Personal Alert Button is a web application designed to help elderly users quickl
 - OpenAI API
 - Lucide React
 
-## Project structure
+## 📁 Project structure
 
-- src/app - main pages and API routes
+- src/app - main pages and app routes
 - src/app/api - voice and text processing endpoints
 - src/components - reusable UI pieces
-- src/lib - settings, auth, report, and Supabase helpers
+- src/lib - settings, auth, reports, and Supabase helpers
 
-## Getting started
+## ▶️ Getting started
 
 ### 1. Install dependencies
 
@@ -50,7 +60,7 @@ Personal Alert Button is a web application designed to help elderly users quickl
 npm install
 ```
 
-### 2. Configure environment variables
+### 2. Set up environment variables
 
 Create a .env.local file in the project root and add:
 
@@ -60,7 +70,7 @@ NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-### 3. Run the app locally
+### 3. Run locally
 
 ```bash
 npm run dev
@@ -68,13 +78,20 @@ npm run dev
 
 Then open http://localhost:3000 in your browser.
 
-## Useful routes
+## 🧭 Useful routes
 
 - / - emergency home screen
 - /elders/recording - recording and submission flow
 - /reports - admin report dashboard
 - /admin/login - administrator login
 
-## Notes
+## 👥 Built by
+- Jayadipa Fukutaro Sie — https://github.com/fukutarosie
+- Moe Pye Sone — https://github.com/moecrosoft
+- Endyano — https://github.com/Endyano
+- Vicky Yang — https://github.com/vicky1234500
+- Chloe Lee Hae Eun — https://github.com/Chloelee05
 
-This project was built as a practical safety and support tool for elderly users, with an emphasis on fast response, clear triage, and simple administration.
+## 🌟 Final note
+
+This project is built in HackOMania 2026. All rights reserved.
