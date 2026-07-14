@@ -10,8 +10,10 @@ function getOpenAI() {
 }
 
 function resolveFfmpeg() {
+  const isWin = process.platform === "win32";
   const candidates = [
-    join(process.cwd(), "node_modules/ffmpeg-static/ffmpeg"),
+    join(process.cwd(), "node_modules", "ffmpeg-static", isWin ? "ffmpeg.exe" : "ffmpeg"),
+    join(process.cwd(), "node_modules", "@ffmpeg-installer", "ffmpeg", isWin ? "ffmpeg.exe" : "ffmpeg"),
     "/opt/homebrew/bin/ffmpeg",
     "/usr/local/bin/ffmpeg",
     "/usr/bin/ffmpeg",
@@ -19,20 +21,30 @@ function resolveFfmpeg() {
 
   for (const p of candidates) {
     try {
-      execSync(`test -x "${p}"`, { stdio: "ignore" });
-      return p;
+      if (isWin) {
+        const { existsSync } = require("fs");
+        if (existsSync(p)) return p;
+      } else {
+        execSync(`test -x "${p}"`, { stdio: "ignore" });
+        return p;
+      }
     } catch {}
   }
 
-  try {
-    return execSync("which ffmpeg", { encoding: "utf8" }).trim();
-  } catch {}
+  if (!isWin) {
+    try {
+      return execSync("which ffmpeg", { encoding: "utf8" }).trim();
+    } catch {}
+  }
 
-  throw new Error("ffmpeg not found. Run: brew install ffmpeg");
+  throw new Error("ffmpeg not found. Install ffmpeg (e.g. choco install ffmpeg on Windows)");
 }
 
-// Resolved once synchronously at module load — no async, no webpack
-const FFMPEG_PATH = resolveFfmpeg();
+let _ffmpegPath = null;
+function getFfmpegPath() {
+  if (_ffmpegPath == null) _ffmpegPath = resolveFfmpeg();
+  return _ffmpegPath;
+}
 
 async function extractFrames(buffer, mimeType) {
   const workDir = join(tmpdir(), randomUUID());
@@ -43,7 +55,7 @@ async function extractFrames(buffer, mimeType) {
   await writeFile(videoPath, buffer);
 
   await new Promise((resolve, reject) => {
-    const proc = spawn(FFMPEG_PATH, [
+    const proc = spawn(getFfmpegPath(), [
       "-i", videoPath,
       "-vf", "fps=0.5",
       "-frames:v", "10",
